@@ -12,7 +12,6 @@ func _ready() -> void:
 	
 
 func _process(delta: float) -> void:
-	draw_camera_logic = true
 	if !current:
 		return
 	

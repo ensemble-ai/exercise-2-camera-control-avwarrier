@@ -22,8 +22,6 @@ func _process(delta: float) -> void:
 	var tpos = target.global_position
 	var cpos = global_position
 	
-	print(top_left.y)
-	
 	if cpos.z - tpos.z >= top_left.y:
 		target.global_position.z = cpos.z + bottom_right.y
 	elif cpos.z - tpos.z <= bottom_right.y:

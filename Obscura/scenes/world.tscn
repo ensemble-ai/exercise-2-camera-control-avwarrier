@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=4 uid="uid://88du8yjefx8j"]
+[gd_scene load_steps=14 format=4 uid="uid://88du8yjefx8j"]
 
 [ext_resource type="PackedScene" uid="uid://dtm13sp1jsrwi" path="res://scenes/vessel.tscn" id="1_oaql3"]
 [ext_resource type="Script" path="res://scripts/camera_selector.gd" id="2_qffo5"]
@@ -9,6 +9,7 @@
 [ext_resource type="AudioStream" uid="uid://6tbtl0jk0dlo" path="res://assets/audio/VGMA Challenge - July 16th.wav" id="5_o8tm3"]
 [ext_resource type="Script" path="res://scripts/camera_controllers/auto_scroll.gd" id="6_e85pm"]
 [ext_resource type="Script" path="res://scripts/camera_controllers/lerp_smoothing.gd" id="7_dxnsl"]
+[ext_resource type="Script" path="res://scripts/camera_controllers/lerp_target_focus.gd" id="8_7h1be"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_qr57x"]
 _surfaces = [{
@@ -44,7 +45,7 @@ terrain_manager = NodePath("../TerrainManager")
 
 [node name="CameraSelector" type="Node" parent="." node_paths=PackedStringArray("cameras")]
 script = ExtResource("2_qffo5")
-cameras = [NodePath("../PositionLockCamera"), NodePath("../PushBoxCamera"), NodePath("../PushBoxCamera2"), NodePath("../PushBoxCamera3"), NodePath("../AutoScrollCamera"), NodePath("../LerpSmoothinCamera")]
+cameras = [NodePath("../PositionLockCamera"), NodePath("../PushBoxCamera"), NodePath("../PushBoxCamera2"), NodePath("../PushBoxCamera3"), NodePath("../AutoScrollCamera"), NodePath("../LerpSmoothinCamera"), NodePath("../LerpTargetFocusCamera")]
 
 [node name="PushBoxCamera" parent="." node_paths=PackedStringArray("target") instance=ExtResource("3_ttnp6")]
 transform = Transform3D(1, 0, 0, 0, 1.19249e-08, 1, 0, -1, 1.19249e-08, -0.0201139, 29.9898, 0.00293565)
@@ -91,8 +92,16 @@ target = NodePath("../Vessel")
 
 [node name="LerpSmoothinCamera" parent="." node_paths=PackedStringArray("target") instance=ExtResource("3_ttnp6")]
 script = ExtResource("7_dxnsl")
-follow_speed = 1.5
+follow_speed = 3.0
 catchup_speed = 5.5
+leash_distance = 3.0
+target = NodePath("../Vessel")
+
+[node name="LerpTargetFocusCamera" parent="." node_paths=PackedStringArray("target") instance=ExtResource("3_ttnp6")]
+script = ExtResource("8_7h1be")
+lead_speed = 60.0
+catchup_delay_duration = 0.0
+catchup_speed = 4.0
 leash_distance = 6.0
 target = NodePath("../Vessel")
 

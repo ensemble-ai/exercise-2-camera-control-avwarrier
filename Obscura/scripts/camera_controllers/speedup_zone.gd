@@ -31,17 +31,33 @@ func _process(delta: float) -> void:
 	
 	if direction.x <= speedup_zone_top_left.x or direction.x >= speedup_zone_bottom_right.x:
 		outer_x = true
-		global_position = global_position.lerp(Vector3(tpos.x, 0, cpos.z), 6.3 * delta)
+		var box_width = abs(speedup_zone_top_left.x - speedup_zone_bottom_right.x)
+		#left
+		var diff_between_left_edges = (tpos.x - target.WIDTH / 2.0) - (cpos.x - box_width / 2.0)
+		if diff_between_left_edges < 0:
+			global_position.x += diff_between_left_edges
+		#right
+		var diff_between_right_edges = (tpos.x + target.WIDTH / 2.0) - (cpos.x + box_width / 2.0)
+		if diff_between_right_edges > 0:
+			global_position.x += diff_between_right_edges
 		
 	if direction.z <= speedup_zone_top_left.y or direction.z >= speedup_zone_bottom_right.y:
 		outer_y = true
-		global_position = global_position.lerp(Vector3(cpos.x, 0, tpos.z), 6.3 * delta)
+		var box_height = abs(speedup_zone_top_left.y - speedup_zone_bottom_right.y)
+		#top
+		var diff_between_top_edges = (tpos.z - target.HEIGHT / 2.0) - (cpos.z - box_height / 2.0)
+		if diff_between_top_edges < 0:
+			global_position.z += diff_between_top_edges
+		#bottom
+		var diff_between_bottom_edges = (tpos.z + target.HEIGHT / 2.0) - (cpos.z + box_height / 2.0)
+		if diff_between_bottom_edges > 0:
+			global_position.z += diff_between_bottom_edges
 		
 	if not outer_x and (direction.x <= pushbox_top_left.x or direction.x >= pushbox_bottom_right.x):
-		global_position = global_position.lerp(Vector3(tpos.x, 0, cpos.z), 3 * push_ratio * delta)
+		global_position = global_position.lerp(Vector3(tpos.x, 0, cpos.z), 5 * push_ratio * delta)
 		
 	if not outer_y and (direction.z <= pushbox_top_left.y or direction.z >= pushbox_bottom_right.y):
-		global_position = global_position.lerp(Vector3(cpos.x, 0, tpos.z), 3 * push_ratio * delta)
+		global_position = global_position.lerp(Vector3(cpos.x, 0, tpos.z), 5 * push_ratio * delta)
 		
 	
 	if direction.x > pushbox_top_left.x and direction.x < pushbox_bottom_right.x:
@@ -49,21 +65,6 @@ func _process(delta: float) -> void:
 		
 	if direction.z > pushbox_top_left.y and direction.z < pushbox_bottom_right.y:
 		outer_y = false
-	
-	#if (
-		#direction.x <= speedup_zone_top_left.x or
-		#direction.x >= speedup_zone_bottom_right.x or
-		#direction.z <= speedup_zone_top_left.y or
-		#direction.z >= speedup_zone_bottom_right.y
-	#):
-		#global_position = global_position.lerp(tpos, 6.3 * delta)
-	#elif (
-		#direction.x <= pushbox_top_left.x or
-		#direction.x >= pushbox_bottom_right.x or
-		#direction.z <= pushbox_top_left.y or
-		#direction.z >= pushbox_bottom_right.y
-	#):
-		#global_position = global_position.lerp(tpos, 2 * push_ratio * delta)
 		
 	super(delta)
 

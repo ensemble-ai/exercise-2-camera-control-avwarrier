@@ -112,8 +112,8 @@ script = ExtResource("9_xpt4i")
 push_ratio = 0.8
 pushbox_top_left = Vector2(-3, -3)
 pushbox_bottom_right = Vector2(3, 3)
-speedup_zone_top_left = Vector2(-10, -7)
-speedup_zone_bottom_right = Vector2(10, 7)
+speedup_zone_top_left = Vector2(-10, -10)
+speedup_zone_bottom_right = Vector2(10, 10)
 target = NodePath("../Vessel")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]

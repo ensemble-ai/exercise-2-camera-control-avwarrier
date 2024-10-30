@@ -25,7 +25,6 @@ func _process(delta: float) -> void:
 	#left
 	var diff_between_left_edges = (tpos.x - target.WIDTH / 2.0) - (cpos.x - box_width / 2.0)
 	if diff_between_left_edges < 0:
-		print(diff_between_left_edges)
 		global_position.x += diff_between_left_edges
 	#right
 	var diff_between_right_edges = (tpos.x + target.WIDTH / 2.0) - (cpos.x + box_width / 2.0)

@@ -26,6 +26,12 @@ func _process(delta: float) -> void:
 	var diff_position = tpos - cpos
 	var direction = (tpos - cpos)
 	
+	var input_dir = Vector3(
+		Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),
+		0,
+		Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
+		).limit_length(1)
+	
 	var new_position
 
 	if target.velocity == Vector3(0, 0, 0):
@@ -34,7 +40,6 @@ func _process(delta: float) -> void:
 		#global_position = global_position.lerp(tpos, (catchup_speed) * delta)
 		
 	elif abs(diff_position.x) >= leash_distance or abs(diff_position.z) >= leash_distance:
-		print(direction)
 		new_position = global_position
 		
 		#global_position = global_position.lerp(tpos, (follow_speed + catchup_speed) * delta)
@@ -49,7 +54,6 @@ func _process(delta: float) -> void:
 		#top
 		var diff_between_top_edges = (tpos.z - target.HEIGHT / 2.0) - (cpos.z - leash_distance)
 		if diff_between_top_edges < 0:
-			print(diff_between_top_edges)
 			new_position.z += diff_between_top_edges
 		#bottom
 		var diff_between_bottom_edges = (tpos.z + target.HEIGHT / 2.0) - (cpos.z + leash_distance)
@@ -62,6 +66,15 @@ func _process(delta: float) -> void:
 		#global_position = global_position.lerp(tpos, follow_speed * delta)
 
 	global_position = new_position
+	
+	if input_dir.x == 0 and cpos.x > tpos.x + 0.16:
+		global_position.x -= 0.3
+	elif input_dir.x == 0 and cpos.x < tpos.x - 0.16:
+		global_position.x += 0.3
+	if input_dir.z == 0 and cpos.z > tpos.z + 0.16:
+		global_position.z -= 0.3
+	elif input_dir.z == 0 and cpos.z < tpos.z - 0.16:
+		global_position.z += 0.3
 		
 	super(delta)
 

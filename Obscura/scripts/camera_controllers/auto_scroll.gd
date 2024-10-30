@@ -32,6 +32,7 @@ func _process(delta: float) -> void:
 	elif cpos.x - tpos.x < top_left.x:
 		target.global_position.x = cpos.x - top_left.x
 	
+	target.global_position += auto_scroll_speed
 	global_position += auto_scroll_speed
 		
 	super(delta)
@@ -46,17 +47,17 @@ func draw_logic() -> void:
 	mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	
 	immediate_mesh.surface_begin(Mesh.PRIMITIVE_LINES, material)
-	immediate_mesh.surface_add_vertex(Vector3(-bottom_right.x - 0.5, 0, top_left.y))
-	immediate_mesh.surface_add_vertex(Vector3(-bottom_right.x - 0.5, 0, bottom_right.y))
+	immediate_mesh.surface_add_vertex(Vector3(-bottom_right.x - 0.5, 0, top_left.y + 0.5))
+	immediate_mesh.surface_add_vertex(Vector3(-bottom_right.x - 0.5, 0, bottom_right.y - 0.5))
 	
-	immediate_mesh.surface_add_vertex(Vector3(-top_left.x, 0, top_left.y))
-	immediate_mesh.surface_add_vertex(Vector3(-top_left.x, 0, bottom_right.y))
+	immediate_mesh.surface_add_vertex(Vector3(-top_left.x + 0.5, 0, top_left.y + 0.5))
+	immediate_mesh.surface_add_vertex(Vector3(-top_left.x + 0.5, 0, bottom_right.y - 0.5))
 	
-	immediate_mesh.surface_add_vertex(Vector3(-top_left.x, 0, top_left.y))
-	immediate_mesh.surface_add_vertex(Vector3(-bottom_right.x - 0.5, 0, top_left.y))
+	immediate_mesh.surface_add_vertex(Vector3(-top_left.x + 0.5, 0, top_left.y + 0.5))
+	immediate_mesh.surface_add_vertex(Vector3(-bottom_right.x - 0.5, 0, top_left.y + 0.5))
 	
-	immediate_mesh.surface_add_vertex(Vector3(-top_left.x, 0, bottom_right.y))
-	immediate_mesh.surface_add_vertex(Vector3(-bottom_right.x - 0.5, 0, bottom_right.y))
+	immediate_mesh.surface_add_vertex(Vector3(-top_left.x + 0.5, 0, bottom_right.y - 0.5))
+	immediate_mesh.surface_add_vertex(Vector3(-bottom_right.x - 0.5, 0, bottom_right.y - 0.5))
 	
 	immediate_mesh.surface_end()
 

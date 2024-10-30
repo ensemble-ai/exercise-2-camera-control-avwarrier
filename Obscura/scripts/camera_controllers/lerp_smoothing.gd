@@ -2,13 +2,14 @@ class_name LerpSmoothingCamera
 extends CameraControllerBase
 
 
-@export var follow_speed: float = 1.5
-@export var catchup_speed: float = 5.5
-@export var leash_distance: float = 6
+@export var follow_speed: float
+@export var catchup_speed: float
+@export var leash_distance: float
 
 
 func _ready() -> void:
 	super()
+	#set_process_priority(-1)
 	position = target.position
 	
 
@@ -22,19 +23,24 @@ func _process(delta: float) -> void:
 	var tpos = target.global_position
 	var cpos = global_position
 
+	var diff_position = tpos - cpos
 	var direction = (tpos - cpos)
 	
 	var new_position
 
 	if target.velocity == Vector3(0, 0, 0):
 		new_position = cpos + direction * catchup_speed * delta
-	elif abs(direction.x) >= leash_distance or abs(direction.z) >= leash_distance:
 		
+		#global_position = global_position.lerp(tpos, (catchup_speed) * delta)
+		
+	elif abs(diff_position.x) >= leash_distance or abs(diff_position.z) >= leash_distance:
+		print(direction)
 		new_position = global_position
+		
+		#global_position = global_position.lerp(tpos, (follow_speed + catchup_speed) * delta)
 		
 		var diff_between_left_edges = (tpos.x - target.WIDTH / 2.0) - (cpos.x - leash_distance)
 		if diff_between_left_edges < 0:
-			print(diff_between_left_edges)
 			new_position.x += diff_between_left_edges
 		#right
 		var diff_between_right_edges = (tpos.x + target.WIDTH / 2.0) - (cpos.x + leash_distance)
@@ -49,9 +55,11 @@ func _process(delta: float) -> void:
 		var diff_between_bottom_edges = (tpos.z + target.HEIGHT / 2.0) - (cpos.z + leash_distance)
 		if diff_between_bottom_edges > 0:
 			new_position.z += diff_between_bottom_edges
+		
 			
 	else:
 		new_position = cpos + direction * follow_speed * delta
+		#global_position = global_position.lerp(tpos, follow_speed * delta)
 
 	global_position = new_position
 		

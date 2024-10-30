@@ -7,7 +7,6 @@ extends CameraControllerBase
 @export var catchup_speed: float
 @export var leash_distance: float
 
-var doneWaiting: bool = false
 
 func _ready() -> void:
 	super()
@@ -30,35 +29,38 @@ func _process(delta: float) -> void:
 		Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),
 		0,
 		Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
-		).limit_length(1.0)
+		).limit_length(1)
 		
-	var new_position = cpos
+	var new_position
 
 	if target.velocity == Vector3(0, 0, 0):
-		new_position = cpos + direction * catchup_speed * delta
+		global_position = global_position.lerp(tpos, catchup_speed * delta)
+		
 	elif abs(direction.x) >= leash_distance or abs(direction.z) >= leash_distance:
+		var temp_pos = cpos
 		
-		new_position = cpos + input_dir * lead_speed * delta
-		if abs(direction.x) >= leash_distance and input_dir.x != 0:
-			new_position.x = cpos.x + (input_dir.x * 0.8333)
+		#if input_dir.x != 0 and input_dir.z != 0:
+		if input_dir.x != 0:
+			temp_pos.x += input_dir.x
+		if input_dir.z != 0:
+			temp_pos.z += input_dir.z
 		
-		if abs(direction.z) >= leash_distance and input_dir.z != 0:
-			new_position.z = cpos.z + (input_dir.z * 0.8333)
+		var curr_speed = pow(pow(target.velocity.x, 2) + pow(target.velocity.z, 2), 0.5)
+		
+		global_position = global_position.lerp(temp_pos, curr_speed * delta)
 			
 	else:
-		new_position = cpos + input_dir * lead_speed * delta
-		doneWaiting = false
+		global_position = global_position.lerp(cpos + input_dir, lead_speed * delta)
 
-	global_position = new_position
-	if true:
-		if input_dir.x == 0 and cpos.x > tpos.x + 0.16:
-			global_position.x -= 0.3
-		elif input_dir.x == 0 and cpos.x < tpos.x - 0.16:
-			global_position.x += 0.3
-		if input_dir.z == 0 and cpos.z > tpos.z + 0.16:
-			global_position.z -= 0.3
-		elif input_dir.z == 0 and cpos.z < tpos.z - 0.16:
-			global_position.z += 0.3
+	
+	if input_dir.x == 0 and cpos.x > tpos.x + 0.16:
+		global_position.x -= 0.3
+	elif input_dir.x == 0 and cpos.x < tpos.x - 0.16:
+		global_position.x += 0.3
+	if input_dir.z == 0 and cpos.z > tpos.z + 0.16:
+		global_position.z -= 0.3
+	elif input_dir.z == 0 and cpos.z < tpos.z - 0.16:
+		global_position.z += 0.3
 		
 	super(delta)
 

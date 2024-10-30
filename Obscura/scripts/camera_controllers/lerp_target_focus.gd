@@ -7,6 +7,8 @@ extends CameraControllerBase
 @export var catchup_speed: float
 @export var leash_distance: float
 
+var waiting: bool = false
+var timer_running: bool = false
 
 func _ready() -> void:
 	super()
@@ -34,12 +36,21 @@ func _process(delta: float) -> void:
 	var new_position
 
 	if target.velocity == Vector3(0, 0, 0):
-		global_position = global_position.lerp(tpos, catchup_speed * delta)
+		
+		if not waiting and (abs(direction.x) >= 0.1 or abs(direction.z) >= 0.1) and not timer_running:
+			timer_running = true
+			await get_tree().create_timer(catchup_delay_duration).timeout
+			waiting = true
+			
+		if waiting:
+			global_position = global_position.lerp(tpos, catchup_speed * delta)
+			if abs(direction.x) < 0.1 and abs(direction.z) < 0.1:
+				timer_running = false
+				waiting = false
 		
 	elif abs(direction.x) >= leash_distance or abs(direction.z) >= leash_distance:
 		var temp_pos = cpos
 		
-		#if input_dir.x != 0 and input_dir.z != 0:
 		if input_dir.x != 0:
 			temp_pos.x += input_dir.x
 		if input_dir.z != 0:
@@ -52,15 +63,15 @@ func _process(delta: float) -> void:
 	else:
 		global_position = global_position.lerp(cpos + input_dir, lead_speed * delta)
 
-	
-	if input_dir.x == 0 and cpos.x > tpos.x + 0.16:
-		global_position.x -= 0.3
-	elif input_dir.x == 0 and cpos.x < tpos.x - 0.16:
-		global_position.x += 0.3
-	if input_dir.z == 0 and cpos.z > tpos.z + 0.16:
-		global_position.z -= 0.3
-	elif input_dir.z == 0 and cpos.z < tpos.z - 0.16:
-		global_position.z += 0.3
+	if not timer_running:
+		if input_dir.x == 0 and cpos.x > tpos.x + 0.16:
+			global_position.x -= 0.3
+		elif input_dir.x == 0 and cpos.x < tpos.x - 0.16:
+			global_position.x += 0.3
+		if input_dir.z == 0 and cpos.z > tpos.z + 0.16:
+			global_position.z -= 0.3
+		elif input_dir.z == 0 and cpos.z < tpos.z - 0.16:
+			global_position.z += 0.3
 		
 	super(delta)
 

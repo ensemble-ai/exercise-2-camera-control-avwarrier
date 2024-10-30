@@ -102,7 +102,7 @@ target = NodePath("../Vessel")
 [node name="LerpTargetFocusCamera" parent="." node_paths=PackedStringArray("target") instance=ExtResource("3_ttnp6")]
 script = ExtResource("8_7h1be")
 lead_speed = 70.0
-catchup_delay_duration = 0.0
+catchup_delay_duration = 0.5
 catchup_speed = 6.0
 leash_distance = 6.0
 target = NodePath("../Vessel")

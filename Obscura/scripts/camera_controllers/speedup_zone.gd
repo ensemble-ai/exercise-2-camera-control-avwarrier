@@ -33,8 +33,6 @@ func _process(delta: float) -> void:
 		Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
 		).limit_length(1)
 	
-
-	
 	# Z-Axis	
 	if direction.z <= speedup_zone_top_left.y or direction.z >= speedup_zone_bottom_right.y:
 		var box_height = abs(speedup_zone_top_left.y - speedup_zone_bottom_right.y)

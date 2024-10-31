@@ -93,6 +93,8 @@ func draw_logic() -> void:
 	var bottom:float = 5
 	
 	immediate_mesh.surface_begin(Mesh.PRIMITIVE_LINES, material)
+	
+	# Cross Camera
 	immediate_mesh.surface_add_vertex(Vector3(0, 0, top))
 	immediate_mesh.surface_add_vertex(Vector3(0, 0, bottom))
 	

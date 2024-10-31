@@ -8,8 +8,7 @@ extends CameraControllerBase
 @export var speedup_zone_top_left: Vector2
 @export var speedup_zone_bottom_right: Vector2
 
-var outer_x: bool = false
-var outer_y: bool = false
+var inner: bool = true
 
 func _ready() -> void:
 	super()
@@ -28,21 +27,16 @@ func _process(delta: float) -> void:
 
 	var direction = (tpos - cpos)
 	
+	var input_dir = Vector3(
+		Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),
+		0,
+		Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
+		).limit_length(1)
 	
-	if direction.x <= speedup_zone_top_left.x or direction.x >= speedup_zone_bottom_right.x:
-		outer_x = true
-		var box_width = abs(speedup_zone_top_left.x - speedup_zone_bottom_right.x)
-		#left
-		var diff_between_left_edges = (tpos.x - target.WIDTH / 2.0) - (cpos.x - box_width / 2.0)
-		if diff_between_left_edges < 0:
-			global_position.x += diff_between_left_edges
-		#right
-		var diff_between_right_edges = (tpos.x + target.WIDTH / 2.0) - (cpos.x + box_width / 2.0)
-		if diff_between_right_edges > 0:
-			global_position.x += diff_between_right_edges
-		
+
+	
+	# Z-Axis	
 	if direction.z <= speedup_zone_top_left.y or direction.z >= speedup_zone_bottom_right.y:
-		outer_y = true
 		var box_height = abs(speedup_zone_top_left.y - speedup_zone_bottom_right.y)
 		#top
 		var diff_between_top_edges = (tpos.z - target.HEIGHT / 2.0) - (cpos.z - box_height / 2.0)
@@ -52,19 +46,36 @@ func _process(delta: float) -> void:
 		var diff_between_bottom_edges = (tpos.z + target.HEIGHT / 2.0) - (cpos.z + box_height / 2.0)
 		if diff_between_bottom_edges > 0:
 			global_position.z += diff_between_bottom_edges
-		
-	if not outer_x and (direction.x <= pushbox_top_left.x or direction.x >= pushbox_bottom_right.x):
-		global_position = global_position.lerp(Vector3(tpos.x, 0, cpos.z), 5 * push_ratio * delta)
-		
-	if not outer_y and (direction.z <= pushbox_top_left.y or direction.z >= pushbox_bottom_right.y):
-		global_position = global_position.lerp(Vector3(cpos.x, 0, tpos.z), 5 * push_ratio * delta)
-		
+			
+	elif abs(input_dir.z) > 0 and not inner:
+		global_position.z = cpos.z + input_dir.z * target.BASE_SPEED * push_ratio * delta
 	
-	if direction.x > pushbox_top_left.x and direction.x < pushbox_bottom_right.x:
-		outer_x = false
-		
-	if direction.z > pushbox_top_left.y and direction.z < pushbox_bottom_right.y:
-		outer_y = false
+	
+	# X-Axis
+	if direction.x <= speedup_zone_top_left.x or direction.x >= speedup_zone_bottom_right.x:
+		var box_width = abs(speedup_zone_top_left.x - speedup_zone_bottom_right.x)
+		#left
+		var diff_between_left_edges = (tpos.x - target.WIDTH / 2.0) - (cpos.x - box_width / 2.0)
+		if diff_between_left_edges < 0:
+			global_position.x += diff_between_left_edges
+		#right
+		var diff_between_right_edges = (tpos.x + target.WIDTH / 2.0) - (cpos.x + box_width / 2.0)
+		if diff_between_right_edges > 0:
+			global_position.x += diff_between_right_edges
+			
+	elif abs(input_dir.x) > 0 and not inner:
+		global_position.x = cpos.x + input_dir.x * target.BASE_SPEED * push_ratio * delta
+	
+	
+	if (
+		direction.x > pushbox_top_left.x and 
+		direction.x < pushbox_bottom_right.x and 
+		direction.z > pushbox_top_left.y and 
+		direction.z < pushbox_bottom_right.y
+	):
+		inner = true
+	else:
+		inner = false
 		
 	super(delta)
 

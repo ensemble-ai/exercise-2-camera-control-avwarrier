@@ -141,8 +141,14 @@ Please refer to the first code review template on how to do a permalink.
 
 
 #### Style Guide Infractions ####
+The code in general follow the Godot Style Guide, which is very clear.  
+- The only slight problem is [double space line](https://github.com/ensemble-ai/exercise-2-camera-control-avwarrier/blob/bc2c42fd957e624ce388668dd658c5f288513877/Obscura/scripts/camera_controllers/lerp_smoothing.gd#L62) and [undeleted code with space line](https://github.com/ensemble-ai/exercise-2-camera-control-avwarrier/blob/bc2c42fd957e624ce388668dd658c5f288513877/Obscura/scripts/camera_controllers/lerp_smoothing.gd#L45)
+- However, there are little comment in main code, which impede understanding. 
 
 #### Style Guide Exemplars ####
+- Variable ordering in the camera controllers are very good, [export variable](https://github.com/ensemble-ai/exercise-2-camera-control-avwarrier/blob/bc2c42fd957e624ce388668dd658c5f288513877/Obscura/scripts/camera_controllers/lerp_smoothing.gd#L5) are always at top. 
+- [Sample variable](https://github.com/ensemble-ai/exercise-2-camera-control-avwarrier/blob/bc2c42fd957e624ce388668dd658c5f288513877/Obscura/scripts/camera_controllers/lerp_smoothing.gd#L47) are defined near the code that use it.
+
 
 ___
 #### Put style guide infractures ####
@@ -161,5 +167,6 @@ If the student has breached the best practices and has done something that shoul
 This should be similar to the Code Style justification.
 
 #### Best Practices Infractions ####
-
+- The student [move the position of node](https://github.com/ensemble-ai/exercise-2-camera-control-avwarrier/blob/bc2c42fd957e624ce388668dd658c5f288513877/Obscura/scripts/camera_controllers/auto_scroll.gd#L35) based on velocity without consider delta, which can cause problem.
 #### Best Practices Exemplars ####
+- The student use [lerp](https://github.com/ensemble-ai/exercise-2-camera-control-avwarrier/blob/bc2c42fd957e624ce388668dd658c5f288513877/Obscura/scripts/camera_controllers/lerp_target_focus.gd#L64) to much the node, which is a mature solution

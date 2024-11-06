@@ -21,8 +21,8 @@ If you are in a rare situation where two peer-reviewers are on a single reposito
 
 ## Peer-reviewer Information
 
-* *name:* [your name here] 
-* *email:* [your @ucdavis.edu email address here]
+* *name:* [WengZixuan] 
+* *email:* [zxweng@ucdavis.edu]
 
 ### Description ###
 
@@ -52,7 +52,7 @@ ___
 
 ### Stage 1 ###
 
-- [ ] Perfect
+- [X] Perfect
 - [ ] Great
 - [ ] Good
 - [ ] Satisfactory
@@ -60,59 +60,70 @@ ___
 
 ___
 #### Justification ##### 
-Write Justification here.
+The camera is correctly centered on vessel at any speed.  
+Controller correctly draw a 5 by 5 unit cross in the center of the screen when draw_camera_logic is true.
 
 ___
 ### Stage 2 ###
 
 - [ ] Perfect
 - [ ] Great
-- [ ] Good
+- [x] Good
 - [ ] Satisfactory
 - [ ] Unsatisfactory
 
 ___
 #### Justification ##### 
-Write Justification here.
+The camera do scroll on the direction of auto scroll speed. However, the student simply add velocity on the global-position without multiply delta, which cause the actual speed to be extramely fast.  
+The zoomin and zoomout do not work.  
+Controller correctly draw the square when draw_camera_logic is true, but is not at the center of screen. 
 
 ___
 ### Stage 3 ###
 
 - [ ] Perfect
 - [ ] Great
-- [ ] Good
+- [x] Good
 - [ ] Satisfactory
 - [ ] Unsatisfactory
 
 ___
 #### Justification ##### 
-Write Justification here.
+The camera follows the vessel with slower velocity, and catchup vessel when vessel stop. However, the export speed variable is measured in strange way, the actual velocity is much faster than the input.  
+The vessel tremble obviously when move at diagonal direction.  
+The vessel is restrict by a leash square instead of leash circle.  
+Controller correctly draw the cross in the center of the screen when draw_camera_logic is true.  
+The zoomin and zoomout do not work.  
 
 ___
 ### Stage 4 ###
 
 - [ ] Perfect
 - [ ] Great
-- [ ] Good
+- [x] Good
 - [ ] Satisfactory
 - [ ] Unsatisfactory
 
 ___
 #### Justification ##### 
-Write Justification here.
+The camera moves faster than the vessel at lead_speed and catchup vessel when vessel stop. However, sometimes the camera catchup vessel without delay, and the export CatchupSpeed and LeashDistance is strange.  
+The vessel tremble obviously when moving. The zoomin and zoomout do not work.  The vessel is restrict by a leash square instead of leash circle.  
+Controller correctly draw the cross in the center of the screen when draw_camera_logic is true.  
+
 
 ___
 ### Stage 5 ###
 
 - [ ] Perfect
-- [ ] Great
+- [x] Great
 - [ ] Good
 - [ ] Satisfactory
 - [ ] Unsatisfactory
 
 ___
 #### Justification ##### 
-Write Justification here.
+Camera moving logic works correct. Camera don't move when vessel is inside speedup zone. Camera move at the push_ratio * velocity of vessel when vessel is inside speedup zone. Camera move at direction of reaching push box with the speed of vessel.  
+The vessel tremble obviously when moving. The zoomin and zoomout do not work.
 ___
 # Code Style #
 
